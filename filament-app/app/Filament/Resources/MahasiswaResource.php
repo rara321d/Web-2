@@ -17,7 +17,13 @@ class MahasiswaResource extends Resource
 {
     protected static ?string $model = Mahasiswa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+
+    protected static ?string $navigationLabel = "Mahasiswa";
+
+    protected static ?string $pluralModelLabel = "Mahasiswa";
+
+    protected static ?string $slug = "Mahasiswa";
 
     public static function form(Form $form): Form
     {
@@ -26,16 +32,25 @@ class MahasiswaResource extends Resource
                 Forms\Components\TextInput::make('nama')
                     ->required(),
                 Forms\Components\TextInput::make('nim')
+                    ->unique()
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->unique()
                     ->required(),
                 Forms\Components\TextInput::make('telepon')
                     ->tel(),
                 Forms\Components\TextInput::make('alamat'),
                 Forms\Components\DatePicker::make('tanggal_lahir'),
                 Forms\Components\TextInput::make('jurusan'),
-                Forms\Components\TextInput::make('foto'),
+                Forms\Components\FileUpload::make('foto')
+                ->image()
+                ->directory('foto_mahasiswa')
+                ->maxSize(5120)
+                ->nullable()
+                ->openable()
+                ->downloadable()
+                ->nullable(),
                 Forms\Components\TextInput::make('status')
                     ->required(),
                 Forms\Components\TextInput::make('angkatan'),
@@ -63,7 +78,7 @@ class MahasiswaResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('jurusan')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('foto')
+                Tables\Columns\ImageColumn::make('foto')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
